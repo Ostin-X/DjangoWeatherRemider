@@ -1,0 +1,60 @@
+{% extends "core/base.html" %}
+
+{% block title %}DWR Index{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid pt-5">
+    <div id="carouselCool" class="carousel slide" data-bs-ride="carousel" data-bs-theme="light">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselCool" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselCool" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselCool" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active c-item">
+                <img src="https://picsum.photos/1800/600?random=1" class="d-block w-100 c-img" alt="No image"
+                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Lewis_Hamilton_2022_S%C3%A3o_Paulo_Grand_Prix_%2852498120773%29_%28cropped%29.jpg/220px-Lewis_Hamilton_2022_S%C3%A3o_Paulo_Grand_Prix_%2852498120773%29_%28cropped%29.jpg';">
+                <div class="carousel-caption top-0 mt-4 d-none d-md-block">
+                    <p class="mt-5 fs-3 text-uppercase">First slide label</p>
+                    <h1 class="mt-5 display-1 fw-bolder text-capitalized">Kyiv</h1>
+                    <button class="btn btn-primary px-4 py-2 fs-5 mt-5">Subscribe to notifications</button>
+                </div>
+            </div>
+            <div class="carousel-item c-item">
+                <img src="https://picsum.photos/1800/600?random=2" class="d-block w-100 c-img" alt="...">
+                <div class="carousel-caption top-0 mt-4 d-none d-md-block bg-white bg-opacity-25 rounded">
+                    <p class="mt-5 fs-3 text-uppercase">First slide label</p>
+                    <h1 class="mt-5 display-1 fw-bolder text-capitalized">Lviv</h1>
+                    <button class="btn btn-primary px-4 py-2 fs-5 mt-5">Subscribe to notifications</button>
+                </div>
+            </div>
+            <div class="carousel-item c-item">
+                <img src="https://picsum.photos/1800/600?random=3" class="d-block w-100 c-img" alt="...">
+                <div class="carousel-caption top-0 mt-4 d-none d-md-block">
+                    <p class="mt-5 fs-3 text-uppercase">First slide label</p>
+                    <h1 class="mt-5 display-1 fw-bolder text-capitalized">Mariupol</h1>
+                    <button class="btn btn-primary px-4 py-2 fs-5 mt-5">Subscribe to notifications</button>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCool" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselCool" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+
+    </div>
+</div>
+
+<div class="container">
+    <h1>{{ title }}</h1>
+    <p>Simple app</p>
+</div>
+{% endblock %}
