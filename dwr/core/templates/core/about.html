@@ -4,5 +4,9 @@
 
 {% block content %}
     <h1>About DWR</h1>
-    <p>About us</p>
+    <p id="message">About us</p>
+<i class="bi bi-moon-stars-fill"></i>
+<button hx-get="{% url 'about' %}" hx-trigger="click" hx-swap="outerHTML">Click me</button>
+
+
 {% endblock %}
