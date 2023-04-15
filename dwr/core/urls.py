@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import index, about
+from .views import about, SubscriptionListViews, CityDetailView
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('about/', about, name='about')
+    path('', SubscriptionListViews.as_view(), name='index'),
+    path('about/', about, name='about'),
+    path('<slug:slug>/', CityDetailView.as_view(), name='city_detail'),
 ]

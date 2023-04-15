@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid pt-5">
+    <div class="c-item">
+        <img src="https://picsum.photos/1800/600?random={{ forloop.counter0 }}" class="d-block w-100
+                c-img" alt="No Image">
+        <div class="carousel-item top-0 mt-4 d-none d-md-block bg-white bg-opacity-25 rounded">
+            <p class="mt-5 fs-3 text-uppercase">First slide label</p>
+            <h1 class="mt-5 display-1 fw-bolder text-capitalized">{{ city }}</h1>
+            <button class="btn btn-primary px-4 py-2 fs-5 mt-5">Subscribe to notifications</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
