@@ -30,6 +30,9 @@ INSTALLED_APPS = [
 
     # my apps
     'core',
+
+    # third party apps
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

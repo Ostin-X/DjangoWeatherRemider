@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
-from .models import Subscription, City
+from .core_functions import get_weather_to_queryset
+from .models import City
 
 
 def about(request):
@@ -9,22 +10,25 @@ def about(request):
 
 
 class SubscriptionListViews(ListView):
-    model = Subscription
+    model = City
     allow_empty = True
     template_name = 'core/index.html'
-    context_object_name = 'subs'
+    context_object_name = 'cities'
 
     def get_context_data(self, **kwargs):
-        print(self.request.user.subs.last())
         context = super().get_context_data(**kwargs)
-        context['title'] = f'{self.request.user} - DWR Sub List'
-        return context
+        context_add = {
+            'title': 'DWR Core App',
+        }
+        return {**context, **context_add}
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return self.request.user.subs.all()
+            queryset = City.objects.filter(subs__user=self.request.user)
         else:
-            return Subscription.objects.order_by('?')[:3]
+            queryset = City.objects.order_by('?')[:9]
+        queryset = get_weather_to_queryset(queryset)
+        return queryset
 
 
 class CityDetailView(DetailView):

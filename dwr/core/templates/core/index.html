@@ -7,20 +7,20 @@
 <div class="container-fluid pt-5">
     <div id="carouselCool" class="carousel slide" data-bs-ride="carousel" data-bs-theme="light">
         <div class="carousel-indicators">
-            {% for s in subs %}
+            {% for city in cities %}
             <button type="button" data-bs-target="#carouselCool" data-bs-slide-to="{{ forloop.counter0 }}"
                     {% if forloop.first %}class="active" {% endif %} aria-current="true"
                     aria-label="Slide {{ forloop.counter }}"></button>
             {% endfor %}
         </div>
         <div class="carousel-inner">
-            {% for s in subs %}
+            {% for city in cities %}
             <div class="carousel-item {% if forloop.first %}active{% endif %} c-item">
                 <img src="https://picsum.photos/1800/600?random={{ forloop.counter0 }}" class="d-block w-100
                 c-img" alt="No Image">
                 <div class="carousel-caption top-0 mt-4 d-none d-md-block bg-white bg-opacity-25 rounded">
-                    <p class="mt-5 fs-3 text-uppercase">First slide label</p>
-                    <h1 class="mt-5 display-1 fw-bolder text-capitalized"><a href="{{ s.city.get_absolute_url }}">{{ s.city }}</a></h1>
+                    <p class="mt-5 fs-3 text-uppercase">{{ city.weather_data }}°C</p>
+                    <h1 class="mt-5 display-1 fw-bolder text-capitalized"><a href="{{ city.get_absolute_url }}">{{ city }}</a></h1>
                     <button class="btn btn-primary px-4 py-2 fs-5 mt-5">Subscribe to notifications</button>
                 </div>
             </div>

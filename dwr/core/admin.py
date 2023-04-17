@@ -1,16 +1,24 @@
 from django.contrib import admin
 
-from .models import City, Subscription
+from .models import Country, City, Subscription
+
+
+class CountryAdmin(admin.ModelAdmin):
+    model = Country
+    list_display = ('id', 'name', 'code')
+    list_display_links = ('id', 'name')
+    search_fields = ('name', 'code')
+
+    ordering = ('name',)
 
 
 class CityAdmin(admin.ModelAdmin):
     model = City
-    list_display = ('id', 'name', 'country', 'codename')
+    list_display = ('id', 'name', 'country', 'codename', 'slug')
     list_display_links = ('id', 'name')
-    search_fields = ('name', 'country', 'codename')
+    search_fields = ('name', 'codename')
 
     ordering = ('name',)
-    prepopulated_fields = {'slug': ('name', 'country')}
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
@@ -23,5 +31,6 @@ class SubscriptionAdmin(admin.ModelAdmin):
     ordering = ('user', 'city')
 
 
+admin.site.register(Country, CountryAdmin)
 admin.site.register(City, CityAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
