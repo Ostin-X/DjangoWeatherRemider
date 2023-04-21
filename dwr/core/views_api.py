@@ -36,6 +36,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         return Response({'user': [i.username for i in user]})
 
 
+
 # class SubscriptionAPIList(generics.ListCreateAPIView):
 #     queryset = Subscription.objects.all()
 #     serializer_class = SubscriptionSerializer
