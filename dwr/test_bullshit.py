@@ -1,14 +1,9 @@
-def increment(x):
-    return x + 1
+words_with_position = []
+words = ['feel', 'graduate', 'movie', 'fashionable', 'bacon',
+         'drop', 'produce', 'acquisition', 'cheap', 'strength',
+         'master', 'perception', 'noise', 'strange', 'am']
 
+for nume, word in enumerate(words, start=1):
+    words_with_position.append((word, nume))
 
-x = [1, 2, 3]
-y = map(increment, x)
-y1 = map(lambda b: b + 1, x)
-
-print(increment(1))
-print(y)
-print(y1)
-print(y == y1)
-print(list(y))
-print(list(y1))
+print(words_with_position)

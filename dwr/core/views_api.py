@@ -1,36 +1,58 @@
-from django.forms import model_to_dict
-from rest_framework import generics
+from django.contrib.auth.models import User
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from .models import City, Country
-from .serializers import CitySerializer
-
-
-# class CityListApiView(APIView):
-#     def get(self, request):
-#         city = City.objects.all().values()
-#         # serializer = CitySerializer(city, many=True)
-#         return Response({'cities': list(city)})
-#
-#     def post(self, request):
-#         post_new = City.objects.create(
-#             name=request.data['name'],
-#             country=Country.objects.get(name=request.data['country']),
-#         )
-#         return Response({'message': model_to_dict(post_new)})
+from .models import City, Subscription
+from .serializers import CitySerializer, SubscriptionSerializer
 
 
-class CityAPIList(generics.ListCreateAPIView):
-    model = City
+class CityViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = City.objects.all()
     serializer_class = CitySerializer
+    lookup_field = 'slug'
 
-    # paginate_by = 10
-    # paginate_by_param = 'page_size'
-    # max_paginate_by = 100
 
-    def get_queryset(self):
-        return City.objects.all()
+# class CityAPIList(generics.ListCreateAPIView):
+#     # queryset = City.objects.all()
+#     serializer_class = CitySerializer
+#
+#     def get_queryset(self):
+#         if not (slug := self.kwargs.get('slug')):
+#             queryset = City.objects.all()
+#         else:
+#             queryset = City.objects.filter(slug=slug)
+#         return queryset
 
-    def post(self, request, *args, **kwargs):
-        new_country_pk = Country.objects.get(name=request.data['country']).pk
-        request.data['country'] = new_country_pk
-        return self.create(request, *args, **kwargs)
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+    lookup_field = 'slug'
+
+    @action(methods=['get'], detail=False)
+    def users(self, request):
+        user = User.objects.all()
+        return Response({'user': [i.username for i in user]})
+
+
+# class SubscriptionAPIList(generics.ListCreateAPIView):
+#     queryset = Subscription.objects.all()
+#     serializer_class = SubscriptionSerializer
+#
+#     def post(self, request, *args, **kwargs):
+#         request.data['city'] = request.data['city'].title()
+#         return self.create(request, *args, **kwargs)
+#
+#     # def get_queryset(self):
+#     #     # for development default user
+#     #     # if (user := self.request.user).id is None:
+#     #     #     user = User.objects.get(username='ostin')
+#     #     queryset = Subscription.objects.filter(user=user, is_active=True)
+#     #     return queryset
+#
+#
+# class SubscriptionAPIUpdate(generics.UpdateAPIView):
+#     queryset = Subscription.objects.all()
+#     serializer_class = SubscriptionSerializer
+#     lookup_field = 'slug'
