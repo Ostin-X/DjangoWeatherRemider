@@ -22,4 +22,3 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
         fields = ('user', 'city', 'is_active', 'time_period', 'weather_data',)
-
