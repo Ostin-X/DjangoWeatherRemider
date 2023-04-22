@@ -11,13 +11,22 @@ User._meta.get_field('email').blank = False
 class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=2, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('country_detail', kwargs={'slug': self.code})
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Країна'
         verbose_name_plural = 'Країни'
+        ordering = ['name']
 
 
 class City(models.Model):
@@ -43,10 +52,10 @@ class City(models.Model):
         verbose_name_plural = 'Міста'
         ordering = ['name']
 
-    # # something for uppercased city name
-    # @classmethod
-    # def get_by_name(cls, name):
-    #     return cls.objects.get(name__iexact=name)
+    # something for case-insensitive city name
+    @classmethod
+    def get_by_name(cls, name):
+        return cls.objects.get(name__iexact=name)
 
 
 class Subscription(models.Model):
@@ -65,9 +74,9 @@ class Subscription(models.Model):
     def __str__(self):
         return f'{self.user} - {self.city}'
 
-    # def save(self, *args, **kwargs):
-    #     self.slug = slugify(f'{self.user.username}-{self.city.codename}')
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f'{self.user.username}--{self.city.codename}')
+        super().save(*args, **kwargs)
 
     # def get_absolute_url(self):
     #     return reverse('city_detail', kwargs={'pk': self.user.pk})
@@ -76,4 +85,4 @@ class Subscription(models.Model):
         unique_together = ('user', 'city')
         verbose_name = 'Підписка'
         verbose_name_plural = 'Підписки'
-        ordering = ['user']
+        ordering = ['user', 'city']

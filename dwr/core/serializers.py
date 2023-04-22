@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import City, Country, Subscription
@@ -15,9 +14,8 @@ class CitySerializer(serializers.ModelSerializer):
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     city = serializers.SlugRelatedField(slug_field='name', queryset=City.objects.all())
-    # for development default user
-    user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all(),
-                                        default=User.objects.get(username='ostin'))
+    # user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Subscription
