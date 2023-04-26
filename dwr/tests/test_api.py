@@ -1,8 +1,11 @@
 from rest_framework.test import APIRequestFactory, APITestCase
 from core.models import City, Subscription, User
 from django.core.management import call_command
+from unittest.mock import patch
+from fixtures import test_temp, mock_get_weather
 
 
+@patch('core.core_functions.get_weather', mock_get_weather)
 class TestApiClass(APITestCase):
     def setUp(self):
         # see what is APIRequestFactory
@@ -39,11 +42,6 @@ class TestApiClass(APITestCase):
         self.assertNotIn('Kyiv', str(response.content))
         self.assertNotIn('Bangkok', str(response.content))
 
-    def test_subscription_api_GET_loggedout(self):
-        response = self.client.get('/api/v1/subscription/')
-
-        self.assertEqual(response.status_code, 403)
-
     def test_basic_login_api_POST(self):
         response = self.client.post('/api/v1/drf-auth/login/?next=/api/v1/city/',
                                     {'username': 'testuser', 'password': '12345'}, follow=True)
@@ -52,6 +50,11 @@ class TestApiClass(APITestCase):
         self.assertIn('Beijing', str(response.content))
         self.assertNotIn('Kyiv', str(response.content))
         self.assertIn('Bangkok', str(response.content))
+
+    def test_subscription_api_GET_logged_out(self):
+        response = self.client.get('/api/v1/subscription/')
+
+        self.assertEqual(response.status_code, 403)
 
     def test_JWT_api_POST(self):
         response = self.client.post('/api/v1/token/',
@@ -145,7 +148,7 @@ class TestApiClass(APITestCase):
         self.assertEqual(response2.status_code, 400)
         self.assertEqual(new_subs.count(), before_subs_count)
 
-    def test_1JWT_api_PUT_subscription(self):
+    def test_JWT_api_PUT_subscription(self):
         before_subs_count = Subscription.objects.count()
         first_sub_slug = Subscription.objects.filter(user__username='testuser')[0].slug
 
@@ -203,6 +206,6 @@ class TestApiClass(APITestCase):
         new_subs = Subscription.objects.all()
 
         self.assertEqual(204, response2.status_code)
-        self.assertEqual(new_subs.count(), before_subs_count-1)
+        self.assertEqual(new_subs.count(), before_subs_count - 1)
         self.assertNotIn('Delhi', str(response2.content))
         self.assertNotIn('Delhi', new_subs.values_list('city__name', flat=True))

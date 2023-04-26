@@ -9,7 +9,8 @@ from core.models import City, Country, Subscription, User
 from fixtures import test_temp, mock_get_weather
 
 
-@override_settings(MEDIA_ROOT=tempfile.mkdtemp(), DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage')
+# @override_settings(MEDIA_ROOT=tempfile.mkdtemp(), DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage')
+@patch('core.core_functions.get_weather', mock_get_weather)
 class TestUrlsClass(TestCase):
     def setUp(self):
         # see what is RequestFactory
@@ -21,7 +22,6 @@ class TestUrlsClass(TestCase):
         call_command('fill_test_cities', filename=filename)
         Subscription.objects.create(user=User.objects.get(username='testuser'), city=City.objects.get(name='Delhi'))
 
-    @patch('core.core_functions.get_weather', mock_get_weather)
     def test_subs_list(self):
         response = self.client.get(reverse('index'))
         self.assertEquals(response.status_code, 200)
@@ -30,7 +30,6 @@ class TestUrlsClass(TestCase):
         self.assertEqual(len(response.context_data['object_list']), 9)
         self.assertEqual(response.context_data['object_list'][0].weather_data, test_temp)
 
-    @patch('core.core_functions.get_weather', mock_get_weather)
     def test_subs_list_logged_in(self):
         self.client.force_login(self.test_user)
         response = self.client.get(reverse('index'))
@@ -42,7 +41,6 @@ class TestUrlsClass(TestCase):
         self.assertEqual(response.context_data['object_list'][0], City.objects.get(name='Delhi'))
         self.assertNotEquals(response.context_data['object_list'][0], City.objects.get(name='Beijing'))
 
-    @patch('core.core_functions.get_weather', mock_get_weather)
     def test_city_view(self):
         response = self.client.get(reverse('city_detail', kwargs={'slug': 'delhiin'}))
         self.assertEquals(response.status_code, 200)

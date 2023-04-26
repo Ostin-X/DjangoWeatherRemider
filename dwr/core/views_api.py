@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+
+from .core_functions import get_weather_to_sub_queryset
 # from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissionsOrAnonReadOnly, \
 #     IsAuthenticated
 
@@ -58,9 +60,12 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if (user_object := self.request.user).is_staff:
-            return Subscription.objects.all()
+            queryset = Subscription.objects.all()
         else:
-            return Subscription.objects.filter(user=user_object)
+            queryset = Subscription.objects.filter(user=user_object)
+        # for dev. change later
+        get_weather_to_sub_queryset(queryset)
+        return queryset
 
     @action(methods=['get'], detail=False)
     def users(self):
