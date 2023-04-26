@@ -21,16 +21,29 @@ class CityViewSet(viewsets.ModelViewSet):  # ReadOnlyModelViewSet
     serializer_class = CitySerializer
     lookup_field = 'slug'
     permission_classes = [IsAdminOrReadOnly]
+
     # pagination_class = CityPagination
 
     def get_queryset(self):
-        country = (self.request.GET.get('country'))
+        # country = (self.request.GET.get('country'))
         # try:
-        if country:
+        if country := (self.request.GET.get('country')):
             return City.objects.filter(country__slug=country.lower())
         # except AttributeError:
         else:
             return City.objects.all()
+
+    # def update_fields(self, city):
+    #     # city.weather_data = city.get_weather_data()
+    #     from core.core_functions import get_weather
+    #     city.weather_data = get_weather(city.name)
+    #     city.save()
+    #     serializer = self.get_serializer(city)
+    #     return Response(serializer.data)
+    #
+    # def retrieve(self, request, *args, **kwargs):
+    #     city = self.get_object()
+    #     return self.update_fields(city)
 
     @action(methods=['get'], detail=False)
     def countries(self):

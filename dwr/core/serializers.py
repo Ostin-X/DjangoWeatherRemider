@@ -20,3 +20,8 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
         fields = ('user', 'city', 'is_active', 'time_period', 'weather_data',)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['city'] = data['city'].title()
+        return data

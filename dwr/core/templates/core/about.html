@@ -1,17 +1,16 @@
-{% extends "core/base.html" %}
+{% extends "base.html" %}
 
-{% block title %}About{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <h1>About DWR</h1>
-    <p id="message">About us</p>
-<i class="bi bi-moon-stars-fill"></i>
-<button hx-get="{% url 'about' %}" hx-trigger="click" hx-swap="outerHTML">Click me</button>
-  {% for num in '123' %}
-    {{ num }}
-<br>
-  {% endfor %}
-
-
-
+    <div class="container">
+        <h1>About DWR</h1>
+        <p id="message">About us</p>
+        <i class="bi bi-moon-stars-fill"></i>
+        <button hx-get="{% url 'about' %}" hx-trigger="click" hx-swap="outerHTML">Click me</button>
+        {% for num in '123' %}
+            {{ num }}
+            <br>
+        {% endfor %}
+    </div>
 {% endblock %}
