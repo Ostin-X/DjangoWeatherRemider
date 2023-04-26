@@ -86,6 +86,20 @@ class TestApiClass(APITestCase):
 
         self.assertEqual(response.status_code, 401)
 
+    def test_1JWT_api_GET_logged_in(self):
+        response = self.client.post('/api/v1/token/',
+                                    {'username': 'testuser', 'password': '12345'})
+        access_token = response.data['access']
+        headers = {'Authorization': 'DWRBearer ' + access_token}
+
+        response2 = self.client.get('/api/v1/subscription/', headers=headers)
+
+        self.assertEqual(response2.status_code, 200)
+        self.assertEqual(1, len(response2.data))
+        self.assertIn('Delhi', str(response2.content))
+        self.assertNotIn('Beijing', str(response2.content))
+        self.assertEqual(str(test_temp), response2.data[0]['weather_data'])
+
     def test_JWT_api_POST_new_subscription(self):
         before_subs_count = Subscription.objects.count()
         response = self.client.post('/api/v1/token/',
