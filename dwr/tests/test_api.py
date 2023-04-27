@@ -86,7 +86,7 @@ class TestApiClass(APITestCase):
 
         self.assertEqual(response.status_code, 401)
 
-    def test_1JWT_api_GET_logged_in(self):
+    def test_JWT_api_GET_logged_in(self):
         response = self.client.post('/api/v1/token/',
                                     {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
@@ -100,7 +100,7 @@ class TestApiClass(APITestCase):
         self.assertNotIn('Beijing', str(response2.content))
         self.assertEqual(str(test_temp), response2.data[0]['weather_data'])
 
-    def test_JWT_api_POST_new_subscription(self):
+    def test_1JWT_api_POST_new_subscription(self):
         before_subs_count = Subscription.objects.count()
         response = self.client.post('/api/v1/token/',
                                     {'username': 'testuser', 'password': '12345'})
@@ -127,8 +127,8 @@ class TestApiClass(APITestCase):
         self.assertIn('Bangkok', str(response3.content))
         self.assertNotIn('Beijing', str(response3.content))
 
-        data2 = {'city': 'Beijing'}
-        # data2 = {'city': 'beiJing'}
+        # data2 = {'city': 'Beijing'}
+        data2 = {'city': 'beiJing'}
 
         response4 = self.client.post('/api/v1/subscription/', data=data2, headers=headers)
         new_subs2 = Subscription.objects.all()

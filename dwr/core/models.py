@@ -52,11 +52,6 @@ class City(models.Model):
         verbose_name_plural = 'Міста'
         ordering = ['name']
 
-    # something for case-insensitive city name
-    @classmethod
-    def get_by_name(cls, name):
-        return cls.objects.get(name__iexact=name)
-
 
 class Subscription(models.Model):
     MY_CHOICES = (
