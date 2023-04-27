@@ -24,19 +24,11 @@ class CaseInsensitiveSlugRelatedField(serializers.SlugRelatedField):
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     city = CaseInsensitiveSlugRelatedField(slug_field='name', queryset=City.objects.all())
 
     # city = serializers.SlugRelatedField(slug_field='name', queryset=City.objects.all())
 
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
     class Meta:
         model = Subscription
         fields = ('user', 'city', 'is_active', 'time_period', 'weather_data',)
-
-    # user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     print(data)
-    #     data['city'] = data['city'].title()
-    #     return data
