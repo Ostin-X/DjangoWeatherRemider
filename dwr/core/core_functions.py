@@ -29,7 +29,6 @@ def get_weather(city):
 
 def get_weather_to_city_queryset(queryset):
     for sub in queryset:
-        print(sub.name)
         sub.weather_data = round(get_weather(sub.name))
         sub.save(update_fields=['weather_data'])
     return queryset
@@ -37,7 +36,6 @@ def get_weather_to_city_queryset(queryset):
 
 def get_weather_to_sub_queryset(queryset):
     for sub in queryset:
-        print(sub.city)
         sub.weather_data = round(get_weather(sub.city.name))
         sub.save(update_fields=['weather_data'])
     return queryset

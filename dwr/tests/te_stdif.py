@@ -1,8 +1,12 @@
 import requests
+from geopy.geocoders import Nominatim
 
-api_response = requests.get('http://127.0.0.1:8000/api/v1/city_list/')
-print(api_response.status_code)
-print(api_response.json())
+print(Nominatim().geocode('Київ,  Україна').latitude)
+
+
+# api_response = requests.get('http://127.0.0.1:8000/api/v1/city_list/')
+# print(api_response.status_code)
+# print(api_response.json())
 
 
 # lat = 50.4501

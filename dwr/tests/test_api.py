@@ -1,8 +1,9 @@
 from rest_framework.test import APIRequestFactory, APITestCase
+
 from core.models import City, Subscription, User
 from django.core.management import call_command
 from unittest.mock import patch
-from fixtures import test_temp, mock_get_weather
+from .fixtures import mock_get_weather, test_temp
 
 
 @patch('core.core_functions.get_weather', mock_get_weather)
@@ -100,7 +101,7 @@ class TestApiClass(APITestCase):
         self.assertNotIn('Beijing', str(response2.content))
         self.assertEqual(str(test_temp), response2.data[0]['weather_data'])
 
-    def test_1JWT_api_POST_new_subscription(self):
+    def test_JWT_api_POST_new_subscription(self):
         before_subs_count = Subscription.objects.count()
         response = self.client.post('/api/v1/token/',
                                     {'username': 'testuser', 'password': '12345'})

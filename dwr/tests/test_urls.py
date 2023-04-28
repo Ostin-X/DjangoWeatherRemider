@@ -6,7 +6,8 @@ from django.urls import reverse
 from unittest.mock import patch
 
 from core.models import City, Country, Subscription, User
-from fixtures import test_temp, mock_get_weather
+from .fixtures import test_temp, mock_get_weather
+from dwr.settings import DATABASES
 
 
 # @override_settings(MEDIA_ROOT=tempfile.mkdtemp(), DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage')

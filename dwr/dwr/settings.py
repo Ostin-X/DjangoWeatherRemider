@@ -17,7 +17,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.eu-north-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'dwr-one.eu-north-1.elasticbeanstalk.com']
 
 # Application definition
 
@@ -76,11 +76,9 @@ DATABASES = {
         'NAME': env('DATABASE_NAME'),
         'USER': env('DATABASE_USER'),
         'PASSWORD': env('DATABASE_PASS'),
-        # 'HOST': env('DATABASE_HOST'),
-        # 'HOST': 'localhost',
         'HOST': 'dwr-database.cdeegum1njna.eu-north-1.rds.amazonaws.com',
         'PORT': '',
-    }
+    },
 }
 
 # Password validation
