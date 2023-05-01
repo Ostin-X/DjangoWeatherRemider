@@ -6,7 +6,7 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-environ.Env.read_env()
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -15,9 +15,9 @@ environ.Env.read_env()
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'dwr-one.eu-north-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'dwr-one.eu-north-1.elasticbeanstalk.com', 'localhost']
 
 # Application definition
 
@@ -110,7 +110,8 @@ LOGOUT_REDIRECT_URL = 'index'
 
 LANGUAGE_CODE = 'uk'
 
-TIME_ZONE = 'Europe/Kyiv'
+# TIME_ZONE = 'Europe/Kyiv'
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
