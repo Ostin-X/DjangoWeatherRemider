@@ -1,0 +1,10 @@
+.gitignore
+
+#.env
+
+node_modules
+/.idea/
+.elasticbeanstalk/app_versions
+.pytest_cache
+__pycache__
+assets

@@ -5,7 +5,9 @@ import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
@@ -17,10 +19,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'dwr-one.eu-north-1.elasticbeanstalk.com', 'localhost']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -76,7 +77,7 @@ DATABASES = {
         'NAME': env('DATABASE_NAME'),
         'USER': env('DATABASE_USER'),
         'PASSWORD': env('DATABASE_PASS'),
-        'HOST': 'dwr-database.cdeegum1njna.eu-north-1.rds.amazonaws.com',
+        'HOST': env('DATABASE_HOST'),
         'PORT': '',
     },
 }
