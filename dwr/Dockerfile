@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN mkdir /code/dwr && mkdir /code/dwr/static && mkdir /code/dwr/media
 RUN mkdir /code/static && mkdir /code/media
 
 # install dependencies
