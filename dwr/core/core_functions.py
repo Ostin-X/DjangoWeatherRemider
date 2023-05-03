@@ -9,6 +9,7 @@ environ.Env.read_env()
 
 
 def get_weather(city):
+    print(f'Weather {city}')
     owm = OWM(env('OWM_API_KEY'))
     mgr = owm.weather_manager()
 
@@ -28,6 +29,7 @@ def get_weather(city):
 
 
 def get_weather_to_city_queryset(queryset):
+    print('City query')
     for sub in queryset:
         sub.weather_data = round(get_weather(sub.name))
         sub.save(update_fields=['weather_data'])
@@ -35,6 +37,7 @@ def get_weather_to_city_queryset(queryset):
 
 
 def get_weather_to_sub_queryset(queryset):
+    print('Sub query')
     for sub in queryset:
         sub.weather_data = round(get_weather(sub.city.name))
         sub.save(update_fields=['weather_data'])

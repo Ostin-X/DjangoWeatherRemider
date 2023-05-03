@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
-from .core_functions import get_weather_to_city_queryset
+# from .core_functions import get_weather_to_city_queryset
 from .forms import CustomUserCreationForm
 from .models import City
 from .utils import DataMixin, NotLoggedAllow
@@ -33,7 +33,7 @@ class SubscriptionListViews(DataMixin, ListView):
             queryset = City.objects.filter(subs__user=self.request.user)
         else:
             queryset = City.objects.order_by('?')[:9]
-        queryset = get_weather_to_city_queryset(queryset)
+        # queryset = get_weather_to_city_queryset(queryset)
         return queryset
 
 
