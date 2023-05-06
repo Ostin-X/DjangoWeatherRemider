@@ -54,9 +54,15 @@ class City(models.Model):
 
 
 class Subscription(models.Model):
+    # MY_CHOICES = (
+    #     (4, 'Four'),
+    #     (8, 'Eight'),
+    #     (12, 'Twelve'),
+    # )
     MY_CHOICES = (
-        (4, 'Four'),
-        (8, 'Eight'),
+        (1, 'One'),
+        (3, 'Three'),
+        (6, 'Six'),
         (12, 'Twelve'),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subs')

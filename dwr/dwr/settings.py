@@ -196,4 +196,4 @@ SIMPLE_JWT = {
 if os.environ.get('USE_DOCKER') == 'true':
     CELERY_BROKER_URL = 'redis://redis:6379'
 else:
-    CELERY_BROKER_URL = 'redis://localhost:6380'
+    CELERY_BROKER_URL = 'redis://localhost:6380/0'

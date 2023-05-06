@@ -1,7 +1,5 @@
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
-from .tasks import send_12h_email_task, update_subscriptions_weather_data
-
 from .forms import CustomUserCreationForm
 from .models import City
 from .utils import DataMixin, NotLoggedAllow
@@ -34,8 +32,6 @@ class SubscriptionListViews(DataMixin, ListView):
             queryset = City.objects.filter(subs__user=self.request.user)
         else:
             queryset = City.objects.order_by('?')[:9]
-        update_subscriptions_weather_data.delay()
-        send_12h_email_task.delay()
         return queryset
 
 

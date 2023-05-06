@@ -56,24 +56,3 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     def users(self):
         user = User.objects.all()
         return Response({'user': [i.username for i in user]})
-
-# class SubscriptionAPIList(generics.ListCreateAPIView):
-#     queryset = Subscription.objects.all()
-#     serializer_class = SubscriptionSerializer
-#
-#     def post(self, request, *args, **kwargs):
-#         request.data['city'] = request.data['city'].title()
-#         return self.create(request, *args, **kwargs)
-#
-#     # def get_queryset(self):
-#     #     # for development default user
-#     #     # if (user := self.request.user).id is None:
-#     #     #     user = User.objects.get(username='ostin')
-#     #     queryset = Subscription.objects.filter(user=user, is_active=True)
-#     #     return queryset
-#
-#
-# class SubscriptionAPIUpdate(generics.UpdateAPIView):
-#     queryset = Subscription.objects.all()
-#     serializer_class = SubscriptionSerializer
-#     lookup_field = 'slug'
