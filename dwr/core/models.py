@@ -63,7 +63,7 @@ class Subscription(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='subs')
     is_active = models.BooleanField(default=True)
     time_period = models.IntegerField(choices=MY_CHOICES, default=0)
-    weather_data = models.TextField(blank=True, null=True)
+    # weather_data = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True, null=True)
 
     def __str__(self):

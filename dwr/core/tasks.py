@@ -1,0 +1,56 @@
+import requests
+import uuid
+from celery import shared_task
+from django.conf import settings
+
+from pyowm import OWM
+import environ
+from .models import Subscription
+
+env = environ.Env()
+environ.Env.read_env()
+
+
+@shared_task
+def get_weather(city):
+    print(f'Weather {city}')
+    owm = OWM(env('OWM_API_KEY'))
+    mgr = owm.weather_manager()
+
+    observation = mgr.weather_at_place(city)
+    # observation = mgr.weather_at_coords(lat, lon)
+
+    w = observation.weather
+    return w.temperature('celsius')['temp']
+
+    # w.detailed_status  # 'clouds'
+    # w.wind()  # {'speed': 4.6, 'deg': 330}
+    # w.humidity  # 87
+    # w.temperature('celsius')  # {'temp_max': 10.5, 'temp': 9.7, 'temp_min': 9.0}
+    # w.rain  # {}
+    # w.heat_index  # None
+    # w.clouds  # 75
+
+
+@shared_task
+def get_weather_to_city_queryset():
+    print('City query')
+    queryset = Subscription.objects.all()
+    for sub in queryset:
+        # sub.weather_data = round(get_weather(sub.city.name))
+        # sub = sub.city
+        print(f'---{sub}---, ---{sub.city.weather_data}---')
+        sub.city.weather_data = 118833
+        print(f'---{sub}---, ---{sub.city.weather_data}---')
+        sub.city.save(update_fields=['weather_data'])
+        print(f'---{sub}---, ---{sub.city.weather_data}---')
+        print(f'REALLLL---{Subscription.objects.get(pk=sub.pk)}---, ---{Subscription.objects.get(pk=sub.pk).city.weather_data}---')
+    # return queryset
+
+
+def get_weather_to_sub_queryset(queryset):
+    print('Sub query')
+    for sub in queryset:
+        sub.weather_data = round(get_weather(sub.city.name))
+        sub.save(update_fields=['weather_data'])
+    return queryset

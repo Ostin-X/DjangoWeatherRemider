@@ -2,17 +2,6 @@ version: '3.11'
 
 
 services:
-  redis:
-    image: redis
-    restart: always
-
-  worker:
-    restart: always
-    env_file: .env
-    build:
-      context: .
-    command: ['celery', '-A', 'dwr', 'worker']
-
   dwr:
     build:
       context: .
@@ -26,7 +15,6 @@ services:
       sh -c "python manage.py collectstatic --noinput &&
              python manage.py migrate &&
              gunicorn dwr.wsgi:application -b 0.0.0.0:8000"
-
   nginx:
     build:
       dockerfile: ./Dockerfile
