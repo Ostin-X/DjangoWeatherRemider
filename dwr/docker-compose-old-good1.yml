@@ -6,19 +6,13 @@ services:
     image: redis
     restart: always
 
-  celery-beats:
-    restart: always
-    env_file: .env
-    build:
-      context: .
-    command: celery -A dwr beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-
   worker:
     restart: always
     env_file: .env
     build:
       context: .
     command: celery -A dwr worker --loglevel=INFO
+#    command: ['celery', '-A', 'dwr', 'worker']
 
   dwr:
     build:

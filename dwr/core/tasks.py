@@ -1,21 +1,19 @@
-import requests
-import uuid
 from celery import shared_task
-from django.conf import settings
 
 from pyowm import OWM
 import environ
-from .models import Subscription
+from .models import Subscription, City
 
 env = environ.Env()
 environ.Env.read_env()
 
+owm = OWM(env('OWM_API_KEY'))
+mgr = owm.weather_manager()
 
-@shared_task
+
 def get_weather(city):
-    print(f'Weather {city}')
-    owm = OWM(env('OWM_API_KEY'))
-    mgr = owm.weather_manager()
+    # owm = OWM(env('OWM_API_KEY'))
+    # mgr = owm.weather_manager()
 
     observation = mgr.weather_at_place(city)
     # observation = mgr.weather_at_coords(lat, lon)
@@ -33,24 +31,46 @@ def get_weather(city):
 
 
 @shared_task
-def get_weather_to_city_queryset():
-    print('City query')
-    queryset = Subscription.objects.all()
-    for sub in queryset:
-        # sub.weather_data = round(get_weather(sub.city.name))
-        # sub = sub.city
-        print(f'---{sub}---, ---{sub.city.weather_data}---')
-        sub.city.weather_data = 118833
-        print(f'---{sub}---, ---{sub.city.weather_data}---')
-        sub.city.save(update_fields=['weather_data'])
-        print(f'---{sub}---, ---{sub.city.weather_data}---')
-        print(f'REALLLL---{Subscription.objects.get(pk=sub.pk)}---, ---{Subscription.objects.get(pk=sub.pk).city.weather_data}---')
-    # return queryset
+def update_subscriptions_weather_data():
+    city_query = Subscription.objects.all().values('city')
+    city_objects = City.objects.filter(id__in=city_query)
+    for city in city_objects:
+        print(f'---{city}---, ---{city.weather_data}---')
+        city.weather_data = 4444
+        # city.weather_data = get_weather(city.name)
+        print(f'---{city}---, ---{city.weather_data}---')
+        city.save(update_fields=['weather_data'])
+        print(f'---{city}---, ---{city.weather_data}---')
 
 
-def get_weather_to_sub_queryset(queryset):
-    print('Sub query')
-    for sub in queryset:
-        sub.weather_data = round(get_weather(sub.city.name))
-        sub.save(update_fields=['weather_data'])
-    return queryset
+@shared_task
+def send_4h_email_task():
+    queryset = Subscription.objects.filter(time_period=4)
+    return 'OK'
+
+
+@shared_task
+def send_8h_email_task():
+    queryset = Subscription.objects.filter(time_period__in=[4, 8])
+    return 'OK'
+
+
+@shared_task
+def send_12h_email_task():
+    print('32g;sndfjkbnfgb')
+    queryset = Subscription.objects.filter(time_period__in=[4, 8, 12])
+    print('Send 12h email')
+    print(Subscription.objects.filter(time_period=4))
+    print(Subscription.objects.filter(time_period__in=[4, 8]))
+    print(Subscription.objects.filter(time_period__in=[4, 8, 12]))
+    for subscription in queryset:
+        print(subscription.user)
+        print(subscription.city)
+        print(subscription.time_period)
+        print('---------------------')
+    return 'OK'
+
+
+@shared_task
+def send_24h_email_task():
+    print('32g;sndfjkbnfgb')

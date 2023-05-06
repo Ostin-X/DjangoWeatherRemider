@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     # third party apps
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -104,7 +105,6 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'index'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -190,7 +190,10 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-
 # CELERY_BROKER_URL = env('CELERY_BROKER_URL')
 # CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_BROKER_URL = 'redis://redis:6379'
+# CELERY_BROKER_URL = 'redis://redis:6379'
+if os.environ.get('USE_DOCKER') == 'true':
+    CELERY_BROKER_URL = 'redis://redis:6379'
+else:
+    CELERY_BROKER_URL = 'redis://localhost:6380'
