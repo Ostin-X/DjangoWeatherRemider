@@ -197,3 +197,9 @@ if os.environ.get('USE_DOCKER') == 'true':
     CELERY_BROKER_URL = 'redis://redis:6379'
 else:
     CELERY_BROKER_URL = 'redis://localhost:6380/0'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587

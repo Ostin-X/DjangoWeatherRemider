@@ -1,8 +1,30 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
 from .forms import CustomUserCreationForm
 from .models import City
 from .utils import DataMixin, NotLoggedAllow
+
+from django.contrib.auth import login
+
+
+@csrf_exempt
+def webhook_current_datetime(request):
+    from django.http import HttpResponse
+    import datetime
+
+    if request.method == 'POST':
+        import json
+        data = json.loads(request.body)
+        print(f'data - {data}')
+        # process_webhook_request.delay(data)
+        print(request.body)
+        print(request.user)
+        return HttpResponse(200, 'ok')
+    else:
+        now = datetime.datetime.now()
+        html = "<html><body>It is now %s. Not webhook time</body></html>" % now
+        return HttpResponse(html)
 
 
 class UserRegisterView(NotLoggedAllow, DataMixin, CreateView):

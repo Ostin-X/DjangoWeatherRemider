@@ -1,21 +1,20 @@
-from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
+# from rest_framework.pagination import PageNumberPagination
 
 # from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissionsOrAnonReadOnly, \
 #     IsAuthenticated
 
 from .permissions import IsAdminOrReadOnly, IsOwnerOrIsAdmin
-from .models import City, Subscription, Country
+from .models import City, Subscription, Country, User
 from .serializers import CitySerializer, SubscriptionSerializer
 
 
-class CityPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 100
+# class CityPagination(PageNumberPagination):
+#     page_size = 10
+#     page_size_query_param = 'page_size'
+#     max_page_size = 100
 
 
 class CityViewSet(viewsets.ModelViewSet):  # ReadOnlyModelViewSet
@@ -26,11 +25,8 @@ class CityViewSet(viewsets.ModelViewSet):  # ReadOnlyModelViewSet
     # pagination_class = CityPagination
 
     def get_queryset(self):
-        # country = (self.request.GET.get('country'))
-        # try:
         if country := (self.request.GET.get('country')):
             return City.objects.filter(country__slug=country.lower())
-        # except AttributeError:
         else:
             return City.objects.all()
 

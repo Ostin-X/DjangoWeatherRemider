@@ -1,7 +1,11 @@
-branch-defaults:
+ebbranch-defaults:
   default:
-    environment:  dwr-one
+    environment: dwr-one
     group_suffix: null
+environment-defaults:
+  dwr-one:
+    branch: null
+    repository: null
 global:
   application_name: dwr
   branch: null
