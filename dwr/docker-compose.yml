@@ -1,6 +1,5 @@
 version: '3.11'
 
-
 services:
   redis:
     image: redis
@@ -21,6 +20,7 @@ services:
     command: celery -A dwr worker --loglevel=INFO
 
   dwr:
+    restart: always
     build:
       context: .
     ports:
@@ -35,6 +35,7 @@ services:
              gunicorn dwr.wsgi:application -b 0.0.0.0:8000"
 
   nginx:
+    restart: always
     build:
       dockerfile: ./Dockerfile
       context: ./docker/nginx/
