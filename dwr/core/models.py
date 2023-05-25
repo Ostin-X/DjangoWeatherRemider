@@ -54,11 +54,6 @@ class City(models.Model):
 
 
 class Subscription(models.Model):
-    # MY_CHOICES = (
-    #     (4, 'Four'),
-    #     (8, 'Eight'),
-    #     (12, 'Twelve'),
-    # )
     MY_CHOICES = (
         (1, 'One'),
         (3, 'Three'),

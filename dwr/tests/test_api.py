@@ -66,7 +66,7 @@ class TestApiClass(APITestCase):
         self.assertIn('access', str(response.content))
 
         access_token = response.data['access']
-        headers = {'Authorization': 'DWRBearer ' + access_token}
+        headers = {'Authorization': 'Bearer ' + access_token}
         response2 = self.client.get('/api/v1/subscription/', headers=headers)
 
         self.assertEqual(response2.status_code, 200)
@@ -91,7 +91,7 @@ class TestApiClass(APITestCase):
         response = self.client.post('/api/v1/token/',
                                     {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
-        headers = {'Authorization': 'DWRBearer ' + access_token}
+        headers = {'Authorization': 'Bearer ' + access_token}
 
         response2 = self.client.get('/api/v1/subscription/', headers=headers)
 
@@ -106,7 +106,7 @@ class TestApiClass(APITestCase):
         response = self.client.post('/api/v1/token/',
                                     {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
-        headers = {'Authorization': 'DWRBearer ' + access_token}
+        headers = {'Authorization': 'Bearer ' + access_token}
         data = {'city': 'Bangkok'}
 
         response2 = self.client.post('/api/v1/subscription/', data=data, headers=headers)
@@ -154,7 +154,7 @@ class TestApiClass(APITestCase):
         response = self.client.post('/api/v1/token/',
                                     {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
-        headers = {'Authorization': 'DWRBearer ' + access_token}
+        headers = {'Authorization': 'Bearer ' + access_token}
         data = {'city': 'moscow'}
 
         response2 = self.client.post('/api/v1/subscription/', data=data, headers=headers)
@@ -169,7 +169,7 @@ class TestApiClass(APITestCase):
 
         response = self.client.post('/api/v1/token/', {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
-        headers = {'Authorization': 'DWRBearer ' + access_token}
+        headers = {'Authorization': 'Bearer ' + access_token}
         data = {'city': 'Beijing'}
 
         response2 = self.client.put(f'/api/v1/subscription/{first_sub_slug}/', data=data, headers=headers)
@@ -191,7 +191,7 @@ class TestApiClass(APITestCase):
 
         response = self.client.post('/api/v1/token/', {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
-        headers = {'Authorization': 'DWRBearer ' + access_token}
+        headers = {'Authorization': 'Bearer ' + access_token}
         data = {'time_period': '6'}
 
         response2 = self.client.patch(f'/api/v1/subscription/{first_sub_slug}/', data=data, headers=headers)
@@ -214,7 +214,7 @@ class TestApiClass(APITestCase):
 
         response = self.client.post('/api/v1/token/', {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
-        headers = {'Authorization': 'DWRBearer ' + access_token}
+        headers = {'Authorization': 'Bearer ' + access_token}
         # data = {'time_period': '4'}
 
         response2 = self.client.delete(f'/api/v1/subscription/{first_sub_slug}/', headers=headers)
