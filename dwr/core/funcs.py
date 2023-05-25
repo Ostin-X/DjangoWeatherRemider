@@ -4,6 +4,8 @@ from django.core.mail import EmailMessage
 
 from core.models import Subscription, User
 
+import requests
+
 env = environ.Env()
 environ.Env.read_env()
 
@@ -12,7 +14,6 @@ mgr = owm.weather_manager()
 
 
 def get_weather(city, spoof=False):
-    print(city)
     if spoof:
         from datetime import datetime
         return datetime.now()
@@ -33,13 +34,38 @@ def get_weather(city, spoof=False):
     # w.clouds  # 75
 
 
-def send_email(time_period):
-    queryset = Subscription.objects.filter(time_period=time_period)
-    user_list = queryset.distinct('user').values_list('user', flat=True)
+def send_data(time_period):
+    full_queryset = Subscription.objects.filter(time_period=time_period)
+
+    email_queryset = full_queryset.filter(webhook_url=None)
+    send_email(email_queryset)
+
+    webhook_queryset = full_queryset.exclude(webhook_url=None)
+    send_webhook(webhook_queryset)
+    return 'OK'
+
+
+def send_webhook(webhook_queryset):
+    for sub in webhook_queryset:
+        data = {
+            'city': sub.city.name,
+            'weather': sub.city.weather_data
+        }
+        url = sub.webhook_url
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            print("Webhook sent successfully.")
+        else:
+            print("Failed to send webhook. Status code:", response.status_code)
+    return 'OK'
+
+
+def send_email(email_queryset):
+    user_list = email_queryset.distinct('user').values_list('user', flat=True)
     for user in user_list:
         mail_subject = 'Your weather info'
         message = f'Your weather info\n'
-        for sub in queryset.filter(user=user):
+        for sub in email_queryset.filter(user=user):
             message += f'{sub.city.name} is {sub.city.weather_data} \n'
         to_email = User.objects.get(id=user).email
         email = EmailMessage(

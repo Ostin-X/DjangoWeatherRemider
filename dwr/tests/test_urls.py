@@ -11,7 +11,7 @@ from dwr.settings import DATABASES
 
 
 # @override_settings(MEDIA_ROOT=tempfile.mkdtemp(), DEFAULT_FILE_STORAGE='django.core.files.storage.FileSystemStorage')
-@patch('core.tasks.get_weather', mock_get_weather)
+@patch('core.funcs.get_weather', mock_get_weather)
 class TestUrlsClass(TestCase):
     def setUp(self):
         # see what is RequestFactory

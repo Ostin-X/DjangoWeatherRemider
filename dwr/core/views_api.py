@@ -1,21 +1,44 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 # from rest_framework.pagination import PageNumberPagination
 
-# from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissionsOrAnonReadOnly, \
-#     IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
+# IsAuthenticatedOrReadOnly, IsAdminUser, DjangoModelPermissionsOrAnonReadOnly, \
 
 from .permissions import IsAdminOrReadOnly, IsOwnerOrIsAdmin
 from .models import City, Subscription, Country, User
 from .serializers import CitySerializer, SubscriptionSerializer
 
 
+class WebhookView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def post(request):
+        data_dict = request.data
+
+        user_object = get_object_or_404(User, username=data_dict['user'])
+        city_object = get_object_or_404(City, name=data_dict['city'].capitalize())
+        webhook_url = data_dict['url']
+        time_period = data_dict['time_period']
+
+        try:
+            Subscription.objects.update_or_create(user=user_object, city=city_object, webhook_url=webhook_url,
+                                                  time_period=time_period)
+        except Exception as e:
+            raise e
+
+        return Response(status=201)
+
+
 # class CityPagination(PageNumberPagination):
 #     page_size = 10
 #     page_size_query_param = 'page_size'
 #     max_page_size = 100
-
 
 class CityViewSet(viewsets.ModelViewSet):  # ReadOnlyModelViewSet
     serializer_class = CitySerializer

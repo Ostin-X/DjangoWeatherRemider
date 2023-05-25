@@ -23,7 +23,7 @@ class CityAdmin(admin.ModelAdmin):
 
 class SubscriptionAdmin(admin.ModelAdmin):
     model = Subscription
-    list_display = ('id', 'user', 'city', 'is_active', 'time_period')
+    list_display = ('id', 'user', 'city', 'is_active', 'time_period', 'webhook_url')
     list_display_links = ('id', 'city')
     search_fields = ('user', 'city')
     list_editable = ('is_active', 'time_period')

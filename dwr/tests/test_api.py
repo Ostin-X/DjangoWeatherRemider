@@ -6,7 +6,7 @@ from unittest.mock import patch
 from .fixtures import mock_get_weather, test_temp
 
 
-@patch('core.tasks.get_weather', mock_get_weather)
+@patch('core.funcs.get_weather', mock_get_weather)
 class TestApiClass(APITestCase):
     def setUp(self):
         # see what is APIRequestFactory
