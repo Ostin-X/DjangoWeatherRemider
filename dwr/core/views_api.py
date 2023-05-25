@@ -26,13 +26,25 @@ class WebhookView(APIView):
         webhook_url = data_dict['url']
         time_period = data_dict['time_period']
 
-        try:
-            Subscription.objects.update_or_create(user=user_object, city=city_object, webhook_url=webhook_url,
-                                                  time_period=time_period)
-        except Exception as e:
-            raise e
+        if time_period not in [choice[0] for choice in Subscription.MY_CHOICES]:
+            error_message = "Invalid time_period value provided. Must be (1,3,6,12)"
+            return Response({"error": error_message}, status=400)
 
-        return Response(status=201)
+        try:
+            sub, created = Subscription.objects.update_or_create(
+                user=user_object,
+                city=city_object,
+                defaults={'webhook_url': webhook_url, 'time_period': time_period}
+            )
+        except Exception as e:
+            return e
+
+        if created:
+            response_message = "Webhook created successfully"
+        else:
+            response_message = "Webhook updated successfully"
+
+        return Response(response_message, status=201)
 
 
 # class CityPagination(PageNumberPagination):
