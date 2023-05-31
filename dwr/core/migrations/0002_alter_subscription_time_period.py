@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0002_alter_subscription_time_period'),
+        ('core', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='subscription',
             name='time_period',
-            field=models.PositiveIntegerField(choices=[(3600, '1 Hour'), (7200, '2 Hours'), (10800, '3 Hours'), (21600, '6 Hours')], default=0),
+            field=models.IntegerField(choices=[(3600, '1 Hour'), (7200, '2 Hours'), (10800, '3 Hours'), (21600, '6 Hours')], default=0),
         ),
     ]

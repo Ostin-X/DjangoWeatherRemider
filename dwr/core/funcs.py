@@ -53,6 +53,7 @@ def send_webhook(webhook_queryset):
         }
         url = sub.webhook_url
         response = requests.post(url, json=data)
+        sub.update_next_run()
         if response.status_code == 200:
             print("Webhook sent successfully.")
         else:
@@ -67,6 +68,7 @@ def send_email(email_queryset):
         message = f'Your weather info\n'
         for sub in email_queryset.filter(user=user):
             message += f'{sub.city.name} is {sub.city.weather_data} \n'
+            sub.update_next_run()
         to_email = User.objects.get(id=user).email
         email = EmailMessage(
             mail_subject, message, to=[to_email]

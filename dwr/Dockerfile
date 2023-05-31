@@ -3,7 +3,7 @@ FROM python:3.11-slim
 # env variables
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWEITEBYTECODE 1
-ENV USE_DOCKER=true
+#ENV USE_DOCKER=true
 
 # setting work directory
 WORKDIR /code

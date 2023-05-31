@@ -192,17 +192,17 @@ class TestApiClass(APITestCase):
         response = self.client.post('/api/v1/token/', {'username': 'testuser', 'password': '12345'})
         access_token = response.data['access']
         headers = {'Authorization': 'Bearer ' + access_token}
-        data = {'time_period': '6'}
+        data = {'time_period': '21600'}
 
         response2 = self.client.patch(f'/api/v1/subscription/{first_sub_slug}/', data=data, headers=headers)
         new_subs = Subscription.objects.all()
         new_sub = Subscription.objects.get(slug=first_sub_slug)
 
         self.assertEqual(200, response2.status_code)
-        self.assertEqual(6, new_sub.time_period)
+        self.assertEqual(21600, new_sub.time_period)
         self.assertEqual(new_subs.count(), before_subs_count)
         self.assertIn('Delhi', str(response2.content))
-        self.assertIn('"time_period":6', str(response2.content))
+        self.assertIn('"time_period":21600', str(response2.content))
         self.assertNotIn('Beijing', str(response2.content))
         self.assertIn('Delhi', new_subs.values_list('city__name', flat=True))
         self.assertNotIn('Beijing', new_subs.values_list('city__name', flat=True))

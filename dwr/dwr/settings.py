@@ -190,13 +190,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-# CELERY_BROKER_URL = env('CELERY_BROKER_URL')
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'
-# CELERY_BROKER_URL = 'redis://redis:6379'
-if os.environ.get('USE_DOCKER') == 'true':
-    CELERY_BROKER_URL = 'redis://redis:6379'
-else:
-    CELERY_BROKER_URL = 'redis://localhost:6380/0'
+CELERY_BROKER_URL = 'redis://redis:6379'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'

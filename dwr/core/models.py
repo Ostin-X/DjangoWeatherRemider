@@ -3,15 +3,19 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
 
-User._meta.get_field('email')._unique = True
-User._meta.get_field('email').null = False
-User._meta.get_field('email').blank = False
+from datetime import timedelta
+from django.utils import timezone
+
+email_field = User._meta.get_field('email')
+email_field._unique = True
+email_field.null = False
+email_field.blank = False
 
 
 class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
     code = models.CharField(max_length=2, unique=True)
-    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -34,7 +38,7 @@ class City(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True)
     codename = models.CharField(max_length=100, unique=True, blank=True, null=True)
     weather_data = models.TextField(blank=True, null=True)
-    slug = models.SlugField(max_length=100, unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
 
     def __str__(self):
         return f'{self.name}.{self.country.code}'
@@ -55,17 +59,25 @@ class City(models.Model):
 
 class Subscription(models.Model):
     MY_CHOICES = (
-        (1, 'One'),
-        (3, 'Three'),
-        (6, 'Six'),
-        (12, 'Twelve'),
+        (3600, '1 Hour'),
+        (7200, '2 Hours'),
+        (10800, '3 Hours'),
+        (21600, '6 Hours'),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subs')
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='subs')
     is_active = models.BooleanField(default=True)
-    time_period = models.IntegerField(choices=MY_CHOICES, default=0)
+    time_period = models.PositiveIntegerField(choices=MY_CHOICES, default=0)
+    next_run = models.DateTimeField(blank=True, null=True)
     webhook_url = models.URLField(max_length=255, blank=True, null=True)
-    slug = models.SlugField(max_length=100, unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+
+    def update_next_run(self):
+        if self.time_period > 0:
+            current_time = timezone.now()
+            new_next_run = current_time + timedelta(seconds=self.time_period)
+            self.next_run = new_next_run
+            self.save()
 
     def __str__(self):
         return f'{self.user} - {self.city}'
