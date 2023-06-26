@@ -83,6 +83,8 @@ class Subscription(models.Model):
         return f'{self.user} - {self.city}'
 
     def save(self, *args, **kwargs):
+        if not self.id:  # Only run on creation, not on update
+            self.update_next_run()
         self.slug = slugify(f'{self.user.username}--{self.city.codename}')
         super().save(*args, **kwargs)
 

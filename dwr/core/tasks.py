@@ -2,7 +2,6 @@ from celery import shared_task
 # from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from datetime import datetime
 from django.utils.timezone import make_aware
-from django.db.models import Q
 
 from .funcs import update_weather_sub_queryset, send_webhook, send_email
 from .models import Subscription
@@ -18,7 +17,8 @@ def update_subscriptions_weather_data():
 @shared_task
 def check_schedule_subscription_task():
     now = make_aware(datetime.now())  # Get the current time in the same timezone as your `next_run` field
-    if due_subscriptions := Subscription.objects.filter(Q(next_run__lt=now) | Q(next_run__isnull=True), is_active=True):
+    # if due_subscriptions := Subscription.objects.filter(Q(next_run__lt=now) | Q(next_run__isnull=True), is_active=True):
+    if due_subscriptions := Subscription.objects.filter(next_run__lt=now, is_active=True):
         if webhook_queryset := due_subscriptions.exclude(webhook_url=None):
             send_webhook(webhook_queryset)
         if email_queryset := due_subscriptions.filter(webhook_url=None):
